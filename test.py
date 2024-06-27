@@ -1,4 +1,6 @@
 import github
+import os
+from dotenv import load_dotenv, dotenv_values 
 import google.generativeai as genai
 import requests
 import time
@@ -6,11 +8,11 @@ import time
 class PullNotifs:
     
     def __init__(self):
-        self.git_client = github.Github("ayushb02", "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")        
+        self.git_client = github.Github(USERNAME, ACCESS_TOKEN)        
         self.pulls = []
         self.pull_counts = {}
         self.last_seen_pr = {}  
-        self.GOOGLE_API_KEY = "AIzaSyC7ABMFKF-8yCnAcscCiC6SqbCFKxoN8NM"
+        self.GOOGLE_API_KEY = API_KEY
         genai.configure(api_key=self.GOOGLE_API_KEY)
         self.model = genai.GenerativeModel('gemini-pro')
         
