@@ -15,7 +15,7 @@ class PullNotifs:
         self.GOOGLE_API_KEY = API_KEY
         genai.configure(api_key=self.GOOGLE_API_KEY)
         self.model = genai.GenerativeModel('gemini-pro')
-        self.repo = self.git_client.get_user().get_repo(REPO_NAME)
+        self.repo = self.git_client.get_user().get_repo(REPO_PATH)
         
     def get_all_repos(self):
         self.pulls = []
@@ -67,7 +67,7 @@ class PullNotifs:
         pr.create_issue_comment(response.text)
     
     def detect_new_prs_and_read_files(self):
-        pr_repos = repo.get_pulls('all')
+        pr_repos = self.repo.get_pulls('all')
         for pr in pr_repos:
             if pr.number > self.last_seen_pr.get(repo.name, 0):
                 print(f"New PR detected in {repo.name}: PR #{pr.number} - {pr.title}")
