@@ -85,6 +85,8 @@ In this documentation, we’ll outline the steps to create PR Reviewer.
 
       pip install requests
 
+      pip install PyGithub
+
   Authenticate with GitHub using tokens. 
 
   Listen for new PRs and trigger the bot. 
