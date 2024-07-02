@@ -125,8 +125,6 @@ In this documentation, we’ll outline the steps to create PR Reviewer.
 
   Deploy PR Review Bot as a GitHub App or a serverless function. 
 
-  Set up webhooks to trigger the bot. 
-
 #
 
 #### 9. Monitoring and Maintenance 
