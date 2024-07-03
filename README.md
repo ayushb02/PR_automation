@@ -133,3 +133,45 @@ In this documentation, we’ll outline the steps to create PR Reviewer.
 
   Handle exceptions . 
 
+#
+
+### Prior  /  ToDo  /  Steps to follow 
+
+#
+
+
+1. Install Python
+   
+       https://www.python.org/downloads/
+
+2. Create Virtual Environment
+
+       python -m venv /path/to/new/virtual/environment.
+
+3. Import Github / PyGithub
+
+         pip install PyGithub
+
+4. Get Github's Access Token from Developers Setting
+
+         https://github.com/settings/tokens?type=beta
+
+5. Create a PR in any Repo
+
+6. Choose and Import an LLM (e.g., GPT-3, BERT, Gemini, etc.).
+
+         pip install python-gemini-api
+
+7. Import Requests
+
+         pip install requests
+
+8. Get LLM's API Key
+
+9. Import dotenv to create Environmnt Variables 
+
+        pip install python-dotenv
+   
+Now , run the above code and get PR's reviewed by AI and get responces as comments in PR .
+
+   Enjoy .....    Happy Coding .
