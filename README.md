@@ -168,7 +168,7 @@ In this documentation, we’ll outline the steps to create PR Reviewer.
 
 8. Get LLM's API Key
 
-9. Import dotenv to create Environmnt Variables 
+9. Import dotenv to create Environmnt Variables. (Optional)
 
         pip install python-dotenv
    
