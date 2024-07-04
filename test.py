@@ -1,28 +1,37 @@
 import github
-import os
-from dotenv import load_dotenv, dotenv_values 
 import google.generativeai as genai
 import requests
 import time
+import PyPDF2
 
 class PullNotifs:
     
     def __init__(self):
-        self.git_client = github.Github(USERNAME, ACCESS_TOKEN)        
+        self.git_client = github.Github("your-github-token")  
         self.pulls = []
         self.pull_counts = {}
         self.last_seen_pr = {}  
-        self.GOOGLE_API_KEY = API_KEY
+        self.GOOGLE_API_KEY = "your-google-api-key"
         genai.configure(api_key=self.GOOGLE_API_KEY)
         self.model = genai.GenerativeModel('gemini-pro')
-        self.repo = self.git_client.get_user().get_repo(REPO_PATH)
+        self.guidelines = self.read_pdf('guidelines.pdf') 
+        
+    def read_pdf(self, file_path):
+        with open(file_path, 'rb') as file:
+            reader = PyPDF2.PdfReader(file)
+            text = ""
+            for page in reader.pages:
+                text += page.extract_text()
+        return text
+
     def get_all_repos(self):
         self.pulls = []
         count = 0
-        self.pulls.append(self.repo.get_pulls('all'))
-        self.pull_counts[count] = 0
-        self.last_seen_pr[repo.name] = 0
-        count += 1
+        for repo in self.git_client.get_user().get_repos():
+            self.pulls.append(repo.get_pulls(state='open'))  
+            self.pull_counts[count] = 0
+            self.last_seen_pr[repo.name] = 0
+            count += 1
             
     def set_pull_counts(self):
         count = 0 
@@ -34,11 +43,12 @@ class PullNotifs:
     def check_counts(self):
         counts_check = {}
         count = 0 
-        pr_repos = self.repo.get_pulls('all')
-        counts_check[count] = 0
-        for pr in pr_repos:
-            counts_check[count] += 1
-        count += 1
+        for repo in self.git_client.get_user().get_repos():
+            pr_repos = repo.get_pulls(state='open') 
+            counts_check[count] = 0
+            for pr in pr_repos:
+                counts_check[count] += 1
+            count += 1
         return self.pull_counts == counts_check
     
     def send_message(self):
@@ -61,17 +71,19 @@ class PullNotifs:
                 print(f"Error fetching file content for {file.filename}: {response.status_code}")
     
     def send_to_llm_for_review(self, file_content, pr):
-        response = self.model.generate_content(f"Review this code and comment about it and if there is some improvement then give suggestion: {file_content}")
+        prompt = f"Review this code and comment about it: {file_content}\n\nGuidelines: {self.guidelines}"
+        response = self.model.generate_content(prompt)
         print(response.text)
         pr.create_issue_comment(response.text)
     
     def detect_new_prs_and_read_files(self):
-        pr_repos = self.repo.get_pulls('all')
-        for pr in pr_repos:
-            if pr.number > self.last_seen_pr.get(repo.name, 0):
-                print(f"New PR detected in {repo.name}: PR #{pr.number} - {pr.title}")
-                self.read_files_from_pr(repo.full_name, pr.number)
-                self.last_seen_pr[repo.name] = pr.number
+        for repo in self.git_client.get_user().get_repos():
+            pr_repos = repo.get_pulls(state='open') 
+            for pr in pr_repos:
+                if pr.number > self.last_seen_pr.get(repo.name, 0):
+                    print(f"New PR detected in {repo.name}: PR #{pr.number} - {pr.title}")
+                    self.read_files_from_pr(repo.full_name, pr.number)
+                    self.last_seen_pr[repo.name] = pr.number
 
 if __name__ == "__main__":
     labs = PullNotifs()
