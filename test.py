@@ -3,15 +3,17 @@ import google.generativeai as genai
 import requests
 import time
 import PyPDF2
+import os
+from dotenv import load_dotenv, dotenv_values 
 
 class PullNotifs:
     
     def __init__(self):
-        self.git_client = github.Github("your-github-token")  
+        self.git_client = github.Github(os.getenv('ACCESS_TOKEN'))  
         self.pulls = []
         self.pull_counts = {}
         self.last_seen_pr = {}  
-        self.GOOGLE_API_KEY = "your-google-api-key"
+        self.GOOGLE_API_KEY = os.getenv('API_KEY')
         genai.configure(api_key=self.GOOGLE_API_KEY)
         self.model = genai.GenerativeModel('gemini-pro')
         self.guidelines = self.read_pdf('guidelines.pdf') 
