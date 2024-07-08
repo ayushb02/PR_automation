@@ -73,7 +73,7 @@ class PullNotifs:
                 print(f"Error fetching file content for {file.filename}: {response.status_code}")
     
     def send_to_llm_for_review(self, file_content, pr):
-        prompt = f"Review this code and comment about it: {file_content}\n\nGuidelines: {self.guidelines}"
+        prompt = f"I am a software developer for a company anf these is a code that i have written can you review it and suggest improvement also can you make sure the code followes the companies guidelines, here is the code   {file_content}\n\nHere are the companies Guidelines: {self.guidelines}"
         response = self.model.generate_content(prompt)
         print(response.text)
         pr.create_issue_comment(response.text)
