@@ -17,7 +17,7 @@ class PullNotifs:
         genai.configure(api_key="GEMINI API KEY")
         self.model = genai.GenerativeModel('gemini-pro')
         self.guidelines = self.read_pdf('guidelines.pdf') 
-        self.repo = self.git_client.get_user().get_repo("PR_automation")
+        self.repo = self.git_client.get_user().get_repo("REPOSITORY NAME")
         
     def read_pdf(self, file_path):
         with open(file_path, 'rb') as file:
