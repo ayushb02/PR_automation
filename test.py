@@ -10,7 +10,7 @@ import smtplib
 class PullNotifs:
     
     def __init__(self):
-        self.git_client = github.Github("GITHUb ACCESS TOKEN")  
+        self.git_client = github.Github("GITHUB ACCESS TOKEN")  
         self.pulls = []
         self.pull_counts = {}
         self.last_seen_pr = {}  
